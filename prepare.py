@@ -1,4 +1,5 @@
 import pandas as pd
+from sklearn.model_selection import TimeSeriesSplit
 from acquire import get_activity
 
 def commas_to_ints(df, columns):
@@ -27,6 +28,17 @@ def prep_activity(df):
 
     df['time'] = df.sedentary + df.lightly + df.fairly + df.very
     return df
+
+def prep_for_prophet(df):
+    df = df.drop(columns=['bmr', 'time'])
+    df = df.rename(columns={'date':'ds'})
+    return df
+
+def split(df):
+    tss = TimeSeriesSplit(5)
+    for train_index, test_index in tss.split(df):
+        train, test = df.iloc[train_index], df.iloc[test_index]
+    return train, test
 
 if __name__ == '__main__':
     activity = get_activity()
