@@ -19,7 +19,7 @@ def prep_activity(df):
     # date to datetime, steps/burned/calories to int
     df.date = pd.to_datetime(df.date)
 
-    to_int = ['steps', 'burned', 'calories']
+    to_int = ['steps', 'burned', 'calories', 'sedentary']
     df = commas_to_ints(df, to_int)
 
     df = df.set_index('date')
