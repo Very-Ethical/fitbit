@@ -9,9 +9,9 @@ def commas_to_ints(df, columns):
 
 def prep_activity(df):
     # lazy, short names for lazy programmers
-    lazy_names = {'Date': 'date', 'Calories Burned': 'burned', 'Steps': 'steps', 'Distance': 'distance',
+    lazy_names = {'Date': 'date', 'Calories Burned': 'total_cal', 'Steps': 'steps', 'Distance': 'distance',
                 'Floors': 'floors', 'Minutes Sedentary': 'sedentary', 'Minutes Lightly Active': 'lightly',
-                'Minutes Fairly Active': 'fairly', 'Minutes Very Active': 'very', 'Activity Calories': 'calories'}
+                'Minutes Fairly Active': 'fairly', 'Minutes Very Active': 'very', 'Activity Calories': 'active_cal'}
 
     df = df.rename(columns=lazy_names)
 
