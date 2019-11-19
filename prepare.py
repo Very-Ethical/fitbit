@@ -23,6 +23,9 @@ def prep_activity(df):
     df = commas_to_ints(df, to_int)
 
     df = df.set_index('date')
+    df['bmr'] = df.burned - df.calories
+
+    df['time'] = df.sedentary + df.lightly + df.fairly + df.very
     return df
 
 if __name__ == '__main__':

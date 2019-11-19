@@ -1,4 +1,8 @@
 import pandas as pd
-import sklearn.model_selection.TimeSeriesSplit
-import acquire
-import prepare
+from sklearn.model_selection import TimeSeriesSplit
+from acquire import get_activity
+from prepare import prep_activity
+
+activity = prep_activity(get_activity())
+
+activity = activity.reset_index()
