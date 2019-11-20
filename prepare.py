@@ -11,8 +11,8 @@ def commas_to_ints(df, columns):
 def prep_activity(df):
     # lazy, short names for lazy programmers
     lazy_names = {'Date': 'date', 'Calories Burned': 'total_burned', 'Steps': 'steps', 'Distance': 'distance',
-                'Floors': 'floors', 'Minutes Sedentary': 'sedentary', 'Minutes Lightly Active': 'lightly',
-                'Minutes Fairly Active': 'fairly', 'Minutes Very Active': 'very', 'Activity Calories': 'active_burned'}
+                'Floors': 'floors', 'Minutes Sedentary': 'out', 'Minutes Lightly Active': 'fat_burn',
+                'Minutes Fairly Active': 'cardio', 'Minutes Very Active': 'peak', 'Activity Calories': 'active_burned'}
 
     df = df.rename(columns=lazy_names)
 
@@ -40,7 +40,7 @@ def prep_activity(df):
     return df
 
 def prep_for_prophet(df):
-    df = df.drop(columns=['bmr', 'time', 'stride'])
+    df = df['date', 'total_burned', 'steps', 'distance', 'floors', 'out', 'fat_burn', 'cardio', 'peak', 'active_burned']
     df = df.rename(columns={'date':'ds'})
     return df
 
