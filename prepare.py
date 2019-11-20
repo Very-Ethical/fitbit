@@ -29,7 +29,7 @@ def prep_activity(df):
     df['bmr'] = df.total_burned - df.active_burned
 
     # total time spent with the fitbit running
-    df['time'] = df.sedentary + df.lightly + df.fairly + df.very
+    df['time'] = df.out + df.fat_burn + df.cardio + df.peak
 
     # stride length in feet
     df['stride'] = df.distance / df.steps * 5280
