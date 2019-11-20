@@ -24,6 +24,7 @@ def prep_activity(df):
     df = commas_to_ints(df, to_int)
 
     df = df.set_index('date')
+    df = df.sort_index()
 
     # Basal Metabolic Rate, amount of calories burned per day at rest
     df['bmr'] = df.total_burned - df.active_burned
@@ -46,7 +47,7 @@ def prep_activity(df):
     return df
 
 def prep_for_prophet(df):
-    df = df['date', 'total_burned', 'steps', 'distance', 'floors', 'out', 'fat_burn', 'cardio', 'peak', 'active_burned']
+    df = df[['date', 'total_burned', 'steps', 'distance', 'floors', 'out', 'fat_burn', 'cardio', 'peak', 'active_burned']]
     df = df.rename(columns={'date':'ds'})
     return df
 
