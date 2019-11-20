@@ -49,6 +49,13 @@ def prep_activity(df):
 def prep_for_prophet(df):
     df = df[['date', 'total_burned', 'steps', 'distance', 'floors', 'out', 'fat_burn', 'cardio', 'peak', 'active_burned']]
     df = df.rename(columns={'date':'ds'})
+    df.loc[df['active_burned'] < 100, 'active_burned'] = None
+    df.loc[df['fat_burn'] < 25, 'fat_burn'] = None
+    df.loc[(df.out == 1440) | (df.out < 400), 'out'] = None
+    df.loc[df.floors > 30, 'floors'] = None
+    df.loc[df.distance < .1, 'distance'] = None
+    df.loc[df.steps < 100, 'steps'] = None
+    df.loc[df.total_burned < 1000, 'total_burned'] = None
     return df
 
 def split(df):

@@ -11,44 +11,35 @@ from prepare import prep_activity, prep_for_prophet, split
 
 activity = prep_activity(get_activity())
 activity = activity.reset_index()
-train, test = split(activity)
-train = prep_for_prophet(train)
-test = prep_for_prophet(test)
-
-caps_and_floors = {'steps': {'floor': 0, 'cap': 25000},
-                   'total_burned': {'floor': 799, 'cap': 5000},
-                   'distance': {'floor': 0, 'cap': 11},
-                   'floors': {'floor': 0, 'cap': 30},
-                   'out': {'floor': 28, 'cap': 1400},
-                   'fat_burn': {'floor': 0, 'cap': 350},
-                   'cardio': {'floor': 0, 'cap': 80},
-                   'peak': {'floor': 0, 'cap': 160},
-                   'active_burned': {'floor': 0, 'cap': 2000}}
  
-def model_and_forecast(df, col, caps_and_floors):
-    m = Prophet(daily_seasonality = True, growth = 'logistic', changepoint_range = 0.9)
+def evaluate(model, horizon):
+    cv = cross_validation(model, horizon=horizon)
+    p = performance_metrics(cv)
+    return p
+
+def model_and_forecast(df, col):
+    m = Prophet()
     train = pd.DataFrame()
     train['ds'] = df.ds
     train['y'] = df[col]
-    train['cap'] = caps_and_floors[col]['cap']
-    train['floor'] = caps_and_floors[col]['floor']
     m.fit(train)
-    future = m.make_future_dataframe(periods=37)
-    future['cap'] = caps_and_floors[col]['cap']
-    future['floor'] = caps_and_floors[col]['floor']
+    future = m.make_future_dataframe(periods=14)
     forecast = m.predict(future)
-    model = {'train': train, 'model': m, 'forecast': forecast}
+    p = evaluate(m, '37 days')
+    model = {'train': train, 'model': m, 'forecast': forecast, 'performance': p}
     return model
 
-def model_each_col(df, caps_and_floors):
-    for col in caps_and_floors:
-        caps_and_floors[col]['model'] = model_and_forecast(df, col, caps_and_floors)
-    return caps_and_floors
+def model_each_col(df):
+    model_dict = {}
+    df = prep_for_prophet(df)
+    for col in df.drop(columns='ds'):
+        model_dict[col] = model_and_forecast(df, col)
+    return model_dict
 
-caps_and_floors = model_each_col(train, caps_and_floors)
+models = model_each_col(activity)
 
-def plot_from_dict(caps_and_floors, col):
-    ref = caps_and_floors[col]['model']
+def plot_from_dict(model_dict, col):
+    ref = model_dict[col]
     m = ref['model']
     forecast = ref['forecast']
     m.plot(forecast)
@@ -60,36 +51,15 @@ def plot_all(caps_and_floors):
     for col in caps_and_floors:
         plot_from_dict(caps_and_floors, col)
 
-def evaluate(caps_and_floors, col, test):
-    y = test[col]
-    yhat = caps_and_floors[col]['model']['forecast']['yhat']
-    yhat = yhat.iloc[-37:]
-    mse = metrics.mean_squared_error(y, yhat)
-    rmse = mse ** 1/2
-    return mse, rmse
+def print_evals(model_dict):
+    for model in model_dict:
+        print(model)
+        performance = model_dict[model]['performance']
+        print(performance[['mse', 'rmse']].mean())
 
-def evaluate_all(caps_and_floors, test):
-    results = {}
-    for col in caps_and_floors:
-        raw = evaluate(caps_and_floors, col, test)
-        results[col] = {'mse': raw[0], 'rmse': raw[1]}
-    return results
-
-predictive = {'steps': {'floor': 0, 'cap': 25000},
-              'total_burned': {'floor': 799, 'cap': 5000},
-              'distance': {'floor': 0, 'cap': 11},
-              'floors': {'floor': 0, 'cap': 30},
-              'out': {'floor': 28, 'cap': 1400},
-              'fat_burn': {'floor': 0, 'cap': 350},
-              'cardio': {'floor': 0, 'cap': 80},
-              'peak': {'floor': 0, 'cap': 160},
-              'active_burned': {'floor': 0, 'cap': 2000}}
-
-def predict_2wks_to_csv(df, caps_and_floors):
-    df = prep_for_prophet(df)
-    model_each_col(df, caps_and_floors)
+def predict_2wks_to_csv(model_dict):
     output = pd.DataFrame()
-    for col in caps_and_floors:
-        yhat = caps_and_floors[col]['model']['forecast']['yhat']
-        output[col] = yhat
+    for col in model_dict:
+        yhat = model_dict[col]['forecast']['yhat']
+        output[col] = yhat.iloc[-14:]
     output.to_csv('predictions.csv')
