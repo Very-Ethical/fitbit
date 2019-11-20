@@ -27,10 +27,20 @@ def prep_activity(df):
     df['bmr'] = df.total_burned - df.active_burned
 
     df['time'] = df.sedentary + df.lightly + df.fairly + df.very
+
+    df['stride'] = df.distance / df.steps * 5280
+
+    df['height'] = df.stride / .415
+
+    df['min_age'] = 27
+    df['max_age'] = 32
+
+    df['min_weight'] = ((df.bmr + (5.7 * df.min_age) - (183 * 4.8)) / 13.4) * 2.20462
+    df['max_weight'] = ((df.bmr + (5.7 * df.max_age) - (183 * 4.8)) / 13.4) * 2.20462
     return df
 
 def prep_for_prophet(df):
-    df = df.drop(columns=['bmr', 'time'])
+    df = df.drop(columns=['bmr', 'time', 'stride'])
     df = df.rename(columns={'date':'ds'})
     return df
 
