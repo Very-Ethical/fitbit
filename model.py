@@ -19,10 +19,10 @@ caps_and_floors = {'steps': {'floor': 0, 'cap': 30_000},
                    'total_burned': {'floor': 799, 'cap': 6000},
                    'distance': {'floor': 0, 'cap': 20},
                    'floors': {'floor': 0, 'cap': 250},
-                   'sedentary': {'floor': 28, 'cap': 1440},
-                   'lightly': {'floor': 0, 'cap': 400},
-                   'fairly': {'floor': 0, 'cap': 100},
-                   'very': {'floor': 0, 'cap': 200},
+                   'out': {'floor': 28, 'cap': 1440},
+                   'fat_burn': {'floor': 0, 'cap': 400},
+                   'cardio': {'floor': 0, 'cap': 100},
+                   'peak': {'floor': 0, 'cap': 200},
                    'active_burned': {'floor': 0, 'cap': 4000}}
  
 def model_and_forecast(df, col, caps_and_floors):
@@ -57,3 +57,5 @@ def plot_from_dict(caps_and_floors, col):
 def plot_all(caps_and_floors):
     for col in caps_and_floors:
         plot_from_dict(caps_and_floors, col)
+
+# def evaluate(caps_and_floors, col):

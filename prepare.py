@@ -20,18 +20,24 @@ def prep_activity(df):
     # date to datetime, steps/burned/calories to int
     df.date = pd.to_datetime(df.date)
 
-    to_int = ['steps', 'total_burned', 'active_burned', 'sedentary']
+    to_int = ['steps', 'total_burned', 'active_burned', 'out']
     df = commas_to_ints(df, to_int)
 
     df = df.set_index('date')
+
+    # Basal Metabolic Rate, amount of calories burned per day at rest
     df['bmr'] = df.total_burned - df.active_burned
 
+    # total time spent with the fitbit running
     df['time'] = df.sedentary + df.lightly + df.fairly + df.very
 
+    # stride length in feet
     df['stride'] = df.distance / df.steps * 5280
 
+    # height in feet
     df['height'] = df.stride / .415
 
+    # assumed age range. minimum age ensures weight doesn't go below
     df['min_age'] = 27
     df['max_age'] = 32
 
