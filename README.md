@@ -6,19 +6,20 @@ Find the correct labels, determine which is "extra," predict the missing two wee
 
   
 ***How to use:***
-  First, download or clone this repository by clicking the "Clone or download" button in the top-right of your screen.
 
-  If you have untidy fitbit data, delete all the .csvs currently in the fitbit directory.
+  1. First, download or clone this repository by clicking the "Clone or download" button in the top-right of your screen.
 
-  Then, place all the .csv files in that same fitbit directory inside of the downloaded repository.
+  2. If you have untidy fitbit data, delete all the .csvs currently in the fitbit directory.
 
-  From the terminal while in the repository, type "python acquire.py"
+  3. Then, place all the .csv files in that same fitbit directory inside of the downloaded repository.
 
-  To see the results of the analysis, open the Jupyter Notebook titled "fitbit_project.ipynb."
+  4. From the terminal while in the repository, type "python acquire.py"
 
-  From there, click Kernel -> Restart & Run All.
+  5. To see the results of the analysis, open the Jupyter Notebook titled "fitbit_project.ipynb."
 
-  Please note this process has only been tested on MacOS and is highly unlikely to work as described on Windows computers.
+  6. From there, click Kernel -> Restart & Run All.
+
+  7. Please note this process has only been tested on MacOS and is highly unlikely to work as described on Windows computers.
 
   It is also highly unlikely to produce meaningful results given notably different datasets, since we hard-coded many elements of the model such as, but not limited to:
 
