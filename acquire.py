@@ -24,3 +24,6 @@ def make_activity_csv(dir_name='fitbit'):
 def get_activity():
     activity = pd.read_csv('activity.csv')
     return activity
+
+if __name__ == '__main__':
+    make_activity_csv()

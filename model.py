@@ -36,7 +36,7 @@ def model_each_col(df):
         model_dict[col] = model_and_forecast(df, col)
     return model_dict
 
-models = model_each_col(activity)
+# models = model_each_col(activity)
 
 def plot_from_dict(model_dict, col):
     ref = model_dict[col]
@@ -47,9 +47,20 @@ def plot_from_dict(model_dict, col):
     plt.xlabel('date')
     plt.show()
 
-def plot_all(caps_and_floors):
-    for col in caps_and_floors:
-        plot_from_dict(caps_and_floors, col)
+def plot_components(model_dict, col):
+    ref = model_dict[col]
+    m = ref['model']
+    forecast = ref['forecast']
+    m.plot_components(forecast)
+    plt.show()
+
+def plot_all(model_dict, components=False):
+    if components:
+       for col in model_dict:
+           plot_components(model_dict, col)
+    else:
+        for col in model_dict:
+            plot_from_dict(model_dict, col)
 
 def print_evals(model_dict):
     for model in model_dict:
