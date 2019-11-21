@@ -57,6 +57,7 @@ def plot_components(model_dict, col):
 def plot_all(model_dict, components=False):
     if components:
        for col in model_dict:
+           print(col)
            plot_components(model_dict, col)
     else:
         for col in model_dict:
