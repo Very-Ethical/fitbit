@@ -19,7 +19,7 @@ Find the correct labels, determine which is "extra," predict the missing two wee
 
   6. From there, click Kernel -> Restart & Run All.
 
-  7. Please note this process has only been tested on MacOS and is highly unlikely to work as described on Windows computers.
+  Please note this process has only been tested on MacOS and is highly unlikely to work as described on Windows computers.
 
   It is also highly unlikely to produce meaningful results given notably different datasets, since we hard-coded many elements of the model such as, but not limited to:
 
